@@ -42,14 +42,8 @@ export default function Navbar() {
           <Link to="/" className="text-gray-700 hover:text-purple-600 transition-colors font-medium cursor-pointer">
             Home
           </Link>
-          <Link to="/" className="text-gray-700 hover:text-purple-600 transition-colors font-medium cursor-pointer">
-            Products
-          </Link>
           <Link to="/cart" className="text-gray-700 hover:text-purple-600 transition-colors font-medium cursor-pointer">
             Cart
-          </Link>
-          <Link to="/profile" className="text-gray-700 hover:text-purple-600 transition-colors font-medium cursor-pointer">
-            Profile
           </Link>
         </div>
 
@@ -97,12 +91,12 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/profile" className="flex items-center gap-3 text-gray-700 hover:text-purple-600 transition-colors font-medium cursor-pointer">
+              <div className="flex items-center gap-3 text-gray-700 font-medium">
                 <div className="w-8 h-8 bg-gradient-to-r from-purple-400 to-purple-600 rounded-lg flex items-center justify-center text-white text-sm font-semibold">
                   {user?.first_name ? user.first_name.charAt(0).toUpperCase() : "U"}
                 </div>
-                <span className="hidden sm:inline">{user?.first_name ? `Hi, ${user.first_name}` : "Profile"}</span>
-              </Link>
+                <span className="hidden sm:inline">{user?.first_name ? `Hi, ${user.first_name}` : "User"}</span>
+              </div>
               <button
                 onClick={onLogout}
                 className="text-gray-500 hover:text-red-600 transition-colors font-medium cursor-pointer"

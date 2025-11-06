@@ -132,7 +132,7 @@ export default function Checkout() {
             clear()
             
             alert('🎉 Payment successful! Your order has been placed.')
-            navigate('/profile') // Redirect to profile/orders
+            navigate('/orders') // Redirect to orders
           } catch (error) {
             console.error('Payment verification failed:', error)
             alert('Payment verification failed. Please contact support with payment ID: ' + paymentResponse.razorpay_payment_id)

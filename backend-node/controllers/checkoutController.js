@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const { sendOrderConfirmationEmail } = require('../utils/emailService');
 
 // POST /api/checkout - Mock checkout with receipt {cartItems} → {total, timestamp}
 exports.checkout = async (req, res) => {
@@ -51,10 +52,39 @@ exports.checkout = async (req, res) => {
       items: itemsToCheckout.length
     };
 
+    console.log('✅ Checkout Receipt:', JSON.stringify(receipt, null, 2));
+
+    // Send order confirmation email (non-blocking - won't break checkout if it fails)
+    try {
+      const userName = `${user.first_name} ${user.last_name}`.trim();
+      const orderId = order._id ? order._id.toString() : receipt.order_id || 'N/A';
+      const emailResult = await sendOrderConfirmationEmail({
+        userName: userName,
+        email: user.email,
+        orderId: orderId,
+        items: itemsToCheckout,
+        total: total,
+        timestamp: receipt.timestamp
+      });
+
+      if (emailResult.success) {
+        console.log('📧 Order confirmation email sent successfully');
+      } else {
+        console.log('⚠️ Email notification skipped:', emailResult.message || emailResult.error);
+      }
+    } catch (emailError) {
+      // Email errors should not break checkout
+      console.error('⚠️ Email notification error (non-critical):', emailError.message);
+    }
+
     res.json(receipt);
   } catch (error) {
     console.error('Error processing checkout:', error);
-    res.status(500).json({ error: 'Failed to process checkout' });
+    console.error('Error stack:', error.stack);
+    res.status(500).json({ 
+      error: 'Failed to process checkout',
+      message: error.message || 'Unknown error'
+    });
   }
 };
 

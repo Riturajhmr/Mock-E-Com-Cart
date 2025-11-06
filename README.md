@@ -72,7 +72,18 @@ npm install
 PORT=8080
 MONGODB_URI=mongodb://localhost:27017/ecomm
 SECRET_LOVE=your-secret-key-here
+
+# Email Configuration (Optional - for order confirmation emails)
+# For Gmail:
+# 1. Enable 2-Step Verification on your Google account
+# 2. Generate an App Password: https://myaccount.google.com/apppasswords
+# 3. Use your Gmail address and the App Password below
+EMAIL_SERVICE=gmail
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password-here
 ```
+
+**Note:** Email notifications are optional. If email credentials are not provided, checkout will still work but emails won't be sent.
 
 4. Start the server:
 ```bash

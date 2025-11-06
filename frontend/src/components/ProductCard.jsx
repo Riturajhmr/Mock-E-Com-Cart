@@ -39,7 +39,7 @@ export default function ProductCard({ product }) {
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group">
       {/* Product Image Section */}
       <div className="relative aspect-[4/3] bg-gray-50 overflow-hidden">
-        <Link to={`/products/${productId}`} className="block w-full h-full">
+        <div className="block w-full h-full">
           <img 
             src={image} 
             alt={product.product_name} 
@@ -49,7 +49,7 @@ export default function ProductCard({ product }) {
               e.target.src = fallbackImage
             }}
           />
-        </Link>
+        </div>
         
         {/* Wishlist Icon */}
         <button
@@ -77,11 +77,11 @@ export default function ProductCard({ product }) {
       {/* Product Details Section */}
       <div className="p-5 space-y-3">
         {/* Product Title */}
-        <Link to={`/products/${productId}`} className="block">
-          <h3 className="font-bold text-lg text-gray-900 hover:text-blue-600 transition-colors line-clamp-2 leading-tight">
+        <div className="block">
+          <h3 className="font-bold text-lg text-gray-900 line-clamp-2 leading-tight">
             {product.product_name}
           </h3>
-        </Link>
+        </div>
 
         {/* Product Description */}
         <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">

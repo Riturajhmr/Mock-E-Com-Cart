@@ -1,15 +1,31 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
 import { placeOrder } from '../services/orderAPI'
 import ReceiptModal from '../components/ReceiptModal'
 
 export default function SimpleCheckout() {
   const { items, clear } = useCart()
+  const { user } = useAuth()
   const [form, setForm] = useState({ name: '', email: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [receipt, setReceipt] = useState(null)
   const [showReceipt, setShowReceipt] = useState(false)
+
+  // Auto-fill form with user data
+  useEffect(() => {
+    if (user) {
+      const fullName = user.first_name && user.last_name 
+        ? `${user.first_name} ${user.last_name}`.trim()
+        : user.first_name || user.last_name || ''
+      
+      setForm({
+        name: fullName,
+        email: user.email || ''
+      })
+    }
+  }, [user])
 
   const total = items.reduce((sum, it) => sum + (it.price || 0) * (it.quantity || 1), 0)
 
@@ -40,6 +56,14 @@ export default function SimpleCheckout() {
     try {
       // Call checkout API with cartItems
       const receiptData = await placeOrder(items)
+      
+      // Log receipt data to console
+      console.log('🎉 Order Complete! Receipt Data:', {
+        total: receiptData.total,
+        timestamp: receiptData.timestamp,
+        order_id: receiptData.order_id,
+        items: receiptData.items
+      })
       
       // Show receipt modal
       setReceipt(receiptData)
