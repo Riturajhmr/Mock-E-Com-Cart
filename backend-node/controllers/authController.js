@@ -53,7 +53,6 @@ exports.signUp = async (req, res) => {
       refresh_token: refreshToken,
       user_id,
       usercart: [],
-      address: [],
       orders: []
     });
 

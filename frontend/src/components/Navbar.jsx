@@ -1,28 +1,36 @@
 "use client"
 
-import { Link, useNavigate } from "react-router-dom"
-import { useState } from "react"
-import { useAuth } from "../context/AuthContext"
-import { useCart } from "../context/CartContext"
+import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { useAuth } from '../context/AuthContext'
+import { useCart } from '../context/CartContext'
 
 export default function Navbar() {
   const { token, user, logout } = useAuth()
   const { items } = useCart()
   const navigate = useNavigate()
-  const [q, setQ] = useState("")
+  const [q, setQ] = useState('')
 
   const onLogout = async () => {
     await logout()
-    navigate("/login")
+    navigate('/login')
   }
 
-  const onSearch = async (e) => {
-    e.preventDefault()
+  const onSearch = (event) => {
+    event.preventDefault()
     if (!q.trim()) return
     navigate(`/?q=${encodeURIComponent(q.trim())}`)
   }
 
-  const cartCount = Array.isArray(items) ? items.reduce((n, it) => n + (it.quantity || 1), 0) : 0
+  const cartCount = Array.isArray(items)
+    ? items.reduce((total, item) => total + (item.quantity || 1), 0)
+    : 0
+
+  const displayName = user?.first_name
+    ? `Hi, ${user.first_name}`
+    : user?.email
+    ? `Hi, ${user.email.split('@')[0]}`
+    : 'Hi there'
 
   return (
     <header className="bg-white shadow-sm">
@@ -56,19 +64,19 @@ export default function Navbar() {
 
         {/* Search Bar */}
         <div className="hidden lg:flex items-center gap-3">
-          <div className="relative">
+          <form onSubmit={onSearch} className="relative">
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Type here"
               className="w-48 pl-4 pr-10 py-2.5 bg-[#FFE5D9] border-none rounded-lg text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#8B6F47]/20 text-sm"
             />
-            <button type="submit" onClick={onSearch} className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer">
+            <button type="submit" className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer">
               <svg className="h-5 w-5 text-[#8B6F47]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
-          </div>
+          </form>
         </div>
 
         {/* Right Side Actions */}
@@ -91,6 +99,9 @@ export default function Navbar() {
               <svg className="h-6 w-6 text-[#8B6F47]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
+              <span className="text-sm font-medium text-[#8B6F47] whitespace-nowrap">
+                {displayName}
+              </span>
               <button
                 onClick={onLogout}
                 className="text-gray-600 hover:text-red-600 transition-colors font-medium cursor-pointer text-sm"

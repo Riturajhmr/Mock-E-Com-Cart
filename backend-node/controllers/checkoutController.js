@@ -19,16 +19,29 @@ exports.checkout = async (req, res) => {
       return res.status(400).json({ error: 'Cart is empty' });
     }
 
-    // Calculate total
-    const total = itemsToCheckout.reduce((sum, item) => {
+    // Calculate pricing details
+    const subtotal = itemsToCheckout.reduce((sum, item) => {
       return sum + (item.price * (item.quantity || 1));
     }, 0);
+
+    const discountRate = 0.2; // 20% discount
+    const deliveryFee = 15; // Flat delivery fee
+    const discount = parseFloat((subtotal * discountRate).toFixed(2));
+    const total = parseFloat((subtotal - discount + deliveryFee).toFixed(2));
 
     // Create order
     const order = {
       order_list: itemsToCheckout,
       ordered_on: new Date(),
       total_price: total,
+      discount,
+      pricing: {
+        subtotal: parseFloat(subtotal.toFixed(2)),
+        discountRate,
+        discount,
+        deliveryFee,
+        total
+      },
       payment_method: {
         digital: false,
         cod: true
@@ -44,9 +57,12 @@ exports.checkout = async (req, res) => {
 
     await user.save();
 
-    // Return mock receipt with total and timestamp
     const receipt = {
-      total: total,
+      subtotal: parseFloat(subtotal.toFixed(2)),
+      discountRate,
+      discount,
+      deliveryFee,
+      total,
       timestamp: new Date().toISOString(),
       order_id: order._id,
       items: itemsToCheckout.length
@@ -63,7 +79,10 @@ exports.checkout = async (req, res) => {
         email: user.email,
         orderId: orderId,
         items: itemsToCheckout,
-        total: total,
+        total,
+        subtotal: parseFloat(subtotal.toFixed(2)),
+        discount,
+        deliveryFee,
         timestamp: receipt.timestamp
       });
 

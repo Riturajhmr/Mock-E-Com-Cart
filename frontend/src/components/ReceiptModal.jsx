@@ -25,6 +25,11 @@ export default function ReceiptModal({ isOpen, onClose, receipt }) {
     })
   }
 
+  const subtotal = typeof receipt.subtotal === 'number' ? receipt.subtotal : receipt.total || 0
+  const discount = typeof receipt.discount === 'number' ? receipt.discount : 0
+  const deliveryFee = typeof receipt.deliveryFee === 'number' ? receipt.deliveryFee : 0
+  const finalTotal = typeof receipt.total === 'number' ? receipt.total : subtotal - discount + deliveryFee
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
@@ -64,10 +69,22 @@ export default function ReceiptModal({ isOpen, onClose, receipt }) {
               <p className="font-mono text-sm text-gray-800">{receipt.order_id || 'N/A'}</p>
             </div>
 
-            <div className="border-t border-b py-4">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-700 font-medium">Total Amount</span>
-                <span className="text-2xl font-bold text-gray-900">${receipt.total?.toFixed(2) || '0.00'}</span>
+            <div className="border-t border-b py-4 space-y-2">
+              <div className="flex justify-between text-gray-600">
+                <span>Subtotal</span>
+                <span>${subtotal.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-red-500">
+                <span>Discount</span>
+                <span>-$${discount.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-gray-600">
+                <span>Delivery Fee</span>
+                <span>${deliveryFee.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between items-center pt-2 border-t">
+                <span className="text-gray-700 font-semibold">Total Amount</span>
+                <span className="text-2xl font-bold text-gray-900">${finalTotal.toFixed(2)}</span>
               </div>
             </div>
 

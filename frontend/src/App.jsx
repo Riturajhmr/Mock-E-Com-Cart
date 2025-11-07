@@ -9,8 +9,6 @@ import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
 import ProtectedRoute from './routes/ProtectedRoute'
 import SimpleCheckout from './pages/SimpleCheckout'
-import Address from './pages/Address'
-import OrderHistory from './pages/OrderHistory'
 
 export default function App() {
   return (
@@ -24,8 +22,6 @@ export default function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
             <Route path="/checkout" element={<ProtectedRoute><SimpleCheckout /></ProtectedRoute>} />
-            <Route path="/address" element={<ProtectedRoute><Address /></ProtectedRoute>} />
-            <Route path="/orders" element={<ProtectedRoute><OrderHistory /></ProtectedRoute>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>

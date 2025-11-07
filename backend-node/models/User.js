@@ -1,12 +1,5 @@
 const mongoose = require('mongoose');
 
-const AddressSchema = new mongoose.Schema({
-  house_name: { type: String },
-  street_name: { type: String },
-  city_name: { type: String },
-  pin_code: { type: String }
-}, { _id: true });
-
 const ProductUserSchema = new mongoose.Schema({
   product_id: { type: String, required: true },
   product_name: { type: String },
@@ -21,16 +14,22 @@ const PaymentSchema = new mongoose.Schema({
   cod: { type: Boolean, default: false }
 });
 
+const PricingSchema = new mongoose.Schema({
+  subtotal: { type: Number },
+  discountRate: { type: Number },
+  discount: { type: Number },
+  deliveryFee: { type: Number },
+  total: { type: Number }
+}, { _id: false });
+
 const OrderSchema = new mongoose.Schema({
   order_list: [ProductUserSchema],
   ordered_on: { type: Date, default: Date.now },
   total_price: { type: Number, required: true },
   discount: { type: Number },
+  pricing: PricingSchema,
   payment_method: PaymentSchema,
-  razorpay_order_id: { type: String },
-  razorpay_payment_id: { type: String },
-  status: { type: String },
-  delivery_address: AddressSchema
+  status: { type: String }
 }, { _id: true });
 
 const UserSchema = new mongoose.Schema({
@@ -43,7 +42,6 @@ const UserSchema = new mongoose.Schema({
   refresh_token: { type: String },
   user_id: { type: String, unique: true },
   usercart: { type: [ProductUserSchema], default: [] },
-  address: { type: [AddressSchema], default: [] },
   orders: { type: [OrderSchema], default: [] }
 }, {
   timestamps: true

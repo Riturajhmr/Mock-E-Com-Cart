@@ -27,7 +27,11 @@ export default function SimpleCheckout() {
     }
   }, [user])
 
-  const total = items.reduce((sum, it) => sum + (it.price || 0) * (it.quantity || 1), 0)
+  const subtotal = items.reduce((sum, it) => sum + (it.price || 0) * (it.quantity || 1), 0)
+  const discountRate = 0.2
+  const deliveryFee = 15
+  const discount = subtotal * discountRate
+  const finalTotal = subtotal - discount + deliveryFee
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -59,6 +63,9 @@ export default function SimpleCheckout() {
       
       // Log receipt data to console
       console.log('🎉 Order Complete! Receipt Data:', {
+        subtotal: receiptData.subtotal,
+        discount: receiptData.discount,
+        deliveryFee: receiptData.deliveryFee,
         total: receiptData.total,
         timestamp: receiptData.timestamp,
         order_id: receiptData.order_id,
@@ -191,11 +198,23 @@ export default function SimpleCheckout() {
                   ))}
                 </div>
 
-                {/* Total */}
-                <div className="border-t pt-4">
-                  <div className="flex justify-between items-center">
+                {/* Cost Breakdown */}
+                <div className="border-t pt-4 space-y-3">
+                  <div className="flex justify-between text-gray-600">
+                    <span>Subtotal</span>
+                    <span>${subtotal.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-red-500">
+                    <span>Discount (-20%)</span>
+                    <span>-${discount.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Delivery Fee</span>
+                    <span>${deliveryFee.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between items-center pt-3 border-t">
                     <span className="text-lg font-semibold text-gray-900">Total</span>
-                    <span className="text-2xl font-bold text-gray-900">${total.toFixed(2)}</span>
+                    <span className="text-2xl font-bold text-gray-900">${finalTotal.toFixed(2)}</span>
                   </div>
                 </div>
               </div>

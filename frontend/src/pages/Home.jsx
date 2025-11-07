@@ -49,7 +49,7 @@ export default function Home() {
               {/* Main Title */}
               <h1 className="text-5xl lg:text-7xl font-serif font-bold text-[#FFB6C1] leading-tight">
                 e-commerce Website
-              </h1>
+                </h1>
               
               {/* Slogan */}
               <p className="text-xl lg:text-2xl text-[#8B6F47] font-sans font-medium">
@@ -79,7 +79,7 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-
+              
               {/* Buy Now Button */}
               <button
                 onClick={handleBuyNow}
@@ -95,7 +95,7 @@ export default function Home() {
             {/* Right Side - Product Display */}
             <div className="relative flex items-center justify-center lg:justify-end">
               {/* Large Circular Product Image */}
-              <div className="relative">
+            <div className="relative">
                 <div className="w-80 h-80 lg:w-96 lg:h-96 bg-[#FFE5D9] rounded-full flex items-center justify-center shadow-lg relative overflow-hidden">
                   {featuredProduct ? (
                     <img 
@@ -112,8 +112,8 @@ export default function Home() {
                       <span className="text-4xl text-[#8B6F47]">🪑</span>
                     </div>
                   )}
-                </div>
-
+                  </div>
+                  
                 {/* Speech Bubble 1 - Minimalistic */}
                 <div className="absolute -top-4 -right-4 bg-white rounded-2xl px-4 py-2 shadow-md">
                   <p className="text-[#8B6F47] font-semibold text-sm">Minimalistic.</p>
@@ -132,11 +132,11 @@ export default function Home() {
                     key={product._id || product.Product_ID || index}
                     className="w-20 h-20 rounded-full overflow-hidden shadow-md border-2 border-white cursor-pointer hover:scale-110 transition-transform"
                   >
-                    <img
+                        <img 
                       src={product.image || `https://via.placeholder.com/80?text=${encodeURIComponent(product.product_name || 'Product')}`}
                       alt={product.product_name || `Product ${index + 1}`}
                       className="w-full h-full object-cover"
-                      onError={(e) => {
+                          onError={(e) => {
                         e.target.onerror = null
                         e.target.src = `data:image/svg+xml;base64,${btoa(`<svg width="80" height="80" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#FFE5D9"/><text x="50%" y="50%" font-family="Arial" font-size="10" fill="#8B6F47" text-anchor="middle" dy=".3em">${product.product_name || 'P'}</text></svg>`)}`
                       }}
@@ -150,9 +150,9 @@ export default function Home() {
                     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-200 to-amber-300 shadow-md border-2 border-white"></div>
                   </>
                 )}
-              </div>
             </div>
           </div>
+        </div>
 
           {/* Continue Shopping Link */}
           <div className="mt-8 lg:mt-12 flex justify-end">
@@ -163,7 +163,7 @@ export default function Home() {
               Continue shopping
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+                  </svg>
             </button>
           </div>
         </div>
