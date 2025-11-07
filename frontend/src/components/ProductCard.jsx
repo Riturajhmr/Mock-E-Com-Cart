@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
 export default function ProductCard({ product }) {
   const { add } = useCart()
@@ -27,9 +27,27 @@ export default function ProductCard({ product }) {
   
   const image = hasValidImage ? product.image : fallbackImage
 
-  // Use actual product rating if available, otherwise generate random for demo
-  const rating = product.rating || Math.floor(Math.random() * 2) + 4 // Random rating between 4-5
-  const reviewCount = Math.floor(Math.random() * 100) + 50 // Random review count between 50-150
+  // Generate stable pseudo-random values based on product ID
+  // This ensures the same product always has the same rating and review count
+  const { rating, reviewCount } = useMemo(() => {
+    // Create a simple hash from product ID for consistent pseudo-random values
+    const idString = String(productId || product.product_name || 'default')
+    let hash = 0
+    for (let i = 0; i < idString.length; i++) {
+      const char = idString.charCodeAt(i)
+      hash = ((hash << 5) - hash) + char
+      hash = hash & hash // Convert to 32-bit integer
+    }
+    
+    // Use hash to generate consistent values
+    const stableRating = product.rating || (4 + Math.abs(hash % 2)) // 4 or 5
+    const stableReviewCount = 50 + (Math.abs(hash) % 101) // 50-150
+    
+    return {
+      rating: stableRating,
+      reviewCount: stableReviewCount
+    }
+  }, [productId, product.rating, product.product_name])
 
   const toggleWishlist = () => {
     setIsWishlisted(!isWishlisted)
@@ -38,7 +56,7 @@ export default function ProductCard({ product }) {
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group">
       {/* Product Image Section */}
-      <div className="relative aspect-[4/3] bg-gray-50 overflow-hidden">
+      <div className="relative aspect-[4/3] bg-[#FFE5D9] overflow-hidden">
         <div className="block w-full h-full">
           <img 
             src={image} 
@@ -109,14 +127,14 @@ export default function ProductCard({ product }) {
 
         {/* Price */}
         <div className="flex items-center justify-between">
-          <div className="text-2xl font-bold text-orange-600">
+          <div className="text-2xl font-bold text-[#8B6F47]">
             ${product.price}
           </div>
           
           {/* Add to Cart Button */}
           <button
             onClick={() => add({ product_id: productId, quantity: 1 })}
-            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 flex items-center gap-2 shadow-lg cursor-pointer"
+            className="bg-[#8B6F47] hover:bg-[#7A5F3A] text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 flex items-center gap-2 shadow-lg cursor-pointer"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m6 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />

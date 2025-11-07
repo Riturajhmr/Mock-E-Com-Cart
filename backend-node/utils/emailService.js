@@ -1,13 +1,28 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
+// Log email configuration from env file (on module load)
+console.log('📧 Email Configuration from .env file:');
+console.log('   EMAIL_USER:', process.env.EMAIL_USER || '❌ NOT SET');
+console.log('   EMAIL_PASS:', process.env.EMAIL_PASS ? `${process.env.EMAIL_PASS.substring(0, 3)}***${process.env.EMAIL_PASS.substring(process.env.EMAIL_PASS.length - 2)}` : '❌ NOT SET');
+console.log('   EMAIL_SERVICE:', process.env.EMAIL_SERVICE || 'gmail (default)');
+console.log('   EMAIL_PASS length:', process.env.EMAIL_PASS ? process.env.EMAIL_PASS.length + ' characters' : 'N/A');
+
 // Create reusable transporter object using SMTP transport
 const createTransporter = () => {
   // Validate email configuration before creating transporter
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.log('❌ Email credentials check:');
+    console.log('   EMAIL_USER:', process.env.EMAIL_USER || 'MISSING');
+    console.log('   EMAIL_PASS:', process.env.EMAIL_PASS ? 'SET (hidden)' : 'MISSING');
     throw new Error('Email credentials not configured');
   }
-
+  
+  console.log('✅ Email credentials found:');
+  console.log('   EMAIL_USER:', process.env.EMAIL_USER);
+  console.log('   EMAIL_PASS:', process.env.EMAIL_PASS ? '***SET***' : 'MISSING');
+  console.log('   EMAIL_SERVICE:', process.env.EMAIL_SERVICE || 'gmail');
+  
   return nodemailer.createTransport({
     service: process.env.EMAIL_SERVICE || 'gmail',
     auth: {
