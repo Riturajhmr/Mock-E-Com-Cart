@@ -27,7 +27,7 @@ Full-stack shopping cart application rebuilt in **React + Node/Express + MongoDB
 
 ## Project Summary
 
-- Responsive storefront showcasing mock electronics catalog
+- Responsive storefront showcasing mock electronics catalog ([Demo Video](https://www.loom.com/share/af65bbeef8154cc4b5921622c3080cb6))
 - Authenticated cart management with JWT session
 - Checkout flow that calculates subtotal, discount, delivery fee, and final total
 - Receipt modal + optional order confirmation email via Nodemailer
@@ -260,7 +260,7 @@ curl -X POST http://localhost:8080/api/checkout \
 - [x] `/backend-node` and `/frontend` folders with full source
 - [x] README with setup steps, screenshots, explainer (this file)
 - [x] Bonus features implemented (auth, MongoDB persistence, email)
-- [ ] 1–2 minute demo video (record + link here once uploaded)
+- [x] 1–2 minute demo video — [Watch here](https://www.loom.com/share/af65bbeef8154cc4b5921622c3080cb6)
 
 
 ---
